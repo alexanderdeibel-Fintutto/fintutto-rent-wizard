@@ -50,8 +50,8 @@ export const PRICING_PLANS: PricingPlan[] = [
     description: 'Für aktive Investoren',
     monthlyPrice: 9.99,
     yearlyPrice: 95.90,
-    priceIdMonthly: 'price_pro_monthly', // Replace with actual Stripe Price ID
-    priceIdYearly: 'price_pro_yearly',   // Replace with actual Stripe Price ID
+    priceIdMonthly: 'price_1SwLDt52lqSgjCzeYslwpr6I',
+    priceIdYearly: 'price_1SwLLb52lqSgjCze6Gdp9SIz',
     features: [
       'Unbegrenzte Berechnungen',
       'Alle Basis-Funktionen',
@@ -68,8 +68,8 @@ export const PRICING_PLANS: PricingPlan[] = [
     description: 'Für professionelle Anwender',
     monthlyPrice: 29.99,
     yearlyPrice: 287.90,
-    priceIdMonthly: 'price_business_monthly', // Replace with actual Stripe Price ID
-    priceIdYearly: 'price_business_yearly',   // Replace with actual Stripe Price ID
+    priceIdMonthly: 'price_1SwLLt52lqSgjCzePeTla42F',
+    priceIdYearly: 'price_1SwLMC52lqSgjCzelkWAWdw8',
     features: [
       'Alles aus Pro',
       'Team-Funktionen',
