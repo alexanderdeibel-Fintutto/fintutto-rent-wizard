@@ -21,6 +21,14 @@ serve(async (req) => {
       throw new Error('STRIPE_SECRET_KEY not configured')
     }
 
+    if (!webhookSecret) {
+      console.error('STRIPE_WEBHOOK_SECRET not configured')
+      return new Response(
+        JSON.stringify({ error: 'Webhook secret not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     const stripe = new Stripe(stripeKey, {
       apiVersion: '2023-10-16',
       httpClient: Stripe.createFetchHttpClient(),
@@ -35,23 +43,26 @@ serve(async (req) => {
     const body = await req.text()
     const signature = req.headers.get('stripe-signature')
 
+    if (!signature) {
+      console.error('Missing stripe-signature header')
+      return new Response(
+        JSON.stringify({ error: 'Missing signature' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
     let event: Stripe.Event
 
-    // Verify webhook signature if secret is configured
-    if (webhookSecret && signature) {
-      try {
-        event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
-      } catch (err) {
-        const errMessage = err instanceof Error ? err.message : 'Unknown error'
-        console.error('Webhook signature verification failed:', errMessage)
-        return new Response(
-          JSON.stringify({ error: 'Invalid signature' }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
-      }
-    } else {
-      // For testing without signature verification
-      event = JSON.parse(body)
+    // Verify webhook signature - always required
+    try {
+      event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+    } catch (err) {
+      const errMessage = err instanceof Error ? err.message : 'Unknown error'
+      console.error('Webhook signature verification failed:', errMessage)
+      return new Response(
+        JSON.stringify({ error: 'Invalid signature' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
     }
 
     console.log('Processing event:', event.type)
