@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import type { CalculatorInputs, CalculatorResults } from '@/types/calculator';
 import { useToast } from '@/hooks/use-toast';
+import { getGenericErrorMessage, validateCalculationName, CALCULATION_NAME_MAX_LENGTH } from '@/lib/errorHandler';
 
 interface SaveModalProps {
   isOpen: boolean;
@@ -29,10 +30,12 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
       return;
     }
 
-    if (!name.trim()) {
+    // Validate calculation name
+    const validation = validateCalculationName(name);
+    if (!validation.isValid) {
       toast({
         title: 'Fehler',
-        description: 'Bitte gib einen Namen für die Berechnung ein.',
+        description: validation.error,
         variant: 'destructive',
       });
       return;
@@ -41,7 +44,7 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
     if (!supabase) {
       toast({
         title: 'Fehler',
-        description: 'Supabase ist nicht konfiguriert.',
+        description: 'Backend ist nicht konfiguriert.',
         variant: 'destructive',
       });
       return;
@@ -50,9 +53,11 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
     setLoading(true);
 
     try {
+      const sanitizedName = name.trim().slice(0, CALCULATION_NAME_MAX_LENGTH);
+      
       const { error } = await supabase.from('calculations').insert({
         user_id: user.id,
-        name: name.trim(),
+        name: sanitizedName,
         input_data: inputs,
         results: results,
       });
@@ -61,14 +66,14 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
 
       toast({
         title: 'Gespeichert!',
-        description: `"${name}" wurde erfolgreich gespeichert.`,
+        description: `"${sanitizedName}" wurde erfolgreich gespeichert.`,
       });
       setName('');
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Fehler beim Speichern',
-        description: error.message || 'Ein unbekannter Fehler ist aufgetreten.',
+        description: getGenericErrorMessage(error, 'save'),
         variant: 'destructive',
       });
     } finally {
@@ -115,10 +120,14 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
             <Input
               id="calculation-name"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => setName(e.target.value.slice(0, CALCULATION_NAME_MAX_LENGTH))}
               placeholder="z.B. 3-Zimmer Berlin Mitte"
+              maxLength={CALCULATION_NAME_MAX_LENGTH}
               autoFocus
             />
+            <p className="text-xs text-muted-foreground">
+              {name.length}/{CALCULATION_NAME_MAX_LENGTH} Zeichen
+            </p>
           </div>
         </div>
 

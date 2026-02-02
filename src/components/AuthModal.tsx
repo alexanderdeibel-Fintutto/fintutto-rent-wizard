@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { getGenericErrorMessage } from '@/lib/errorHandler';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -43,8 +44,8 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
         if (error) throw error;
         setSuccess('E-Mail zum Zurücksetzen des Passworts wurde gesendet.');
       }
-    } catch (err: any) {
-      setError(err.message || 'Ein Fehler ist aufgetreten');
+    } catch (err: unknown) {
+      setError(getGenericErrorMessage(err, 'auth'));
     } finally {
       setLoading(false);
     }

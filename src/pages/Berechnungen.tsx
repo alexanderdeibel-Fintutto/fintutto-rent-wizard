@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { Loader2, Trash2, Copy, ArrowRight, FolderOpen } from 'lucide-react';
-import { formatCurrency, formatNumber, getDefaultInputs } from '@/hooks/useCalculator';
-import type { SavedCalculation, CalculatorInputs } from '@/types/calculator';
+import { formatCurrency, formatNumber } from '@/hooks/useCalculator';
+import type { SavedCalculation } from '@/types/calculator';
 import { useToast } from '@/hooks/use-toast';
+import { getGenericErrorMessage, CALCULATION_NAME_MAX_LENGTH } from '@/lib/errorHandler';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,10 +53,10 @@ const Berechnungen = () => {
 
         if (error) throw error;
         setCalculations(data || []);
-      } catch (error: any) {
+      } catch (error: unknown) {
         toast({
           title: 'Fehler',
-          description: 'Berechnungen konnten nicht geladen werden.',
+          description: getGenericErrorMessage(error, 'load'),
           variant: 'destructive',
         });
       } finally {
@@ -103,10 +104,10 @@ const Berechnungen = () => {
         title: 'Dupliziert',
         description: `"${calculation.name}" wurde kopiert.`,
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Fehler',
-        description: 'Berechnung konnte nicht dupliziert werden.',
+        description: getGenericErrorMessage(error, 'duplicate'),
         variant: 'destructive',
       });
     }
@@ -128,10 +129,10 @@ const Berechnungen = () => {
         title: 'Gelöscht',
         description: 'Berechnung wurde gelöscht.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: 'Fehler',
-        description: 'Berechnung konnte nicht gelöscht werden.',
+        description: getGenericErrorMessage(error, 'delete'),
         variant: 'destructive',
       });
     } finally {
@@ -190,7 +191,9 @@ const Berechnungen = () => {
             {calculations.map((calculation) => (
               <Card key={calculation.id} className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg line-clamp-1">{calculation.name}</CardTitle>
+                  <CardTitle className="text-lg line-clamp-1" title={calculation.name}>
+                    {calculation.name.slice(0, CALCULATION_NAME_MAX_LENGTH)}
+                  </CardTitle>
                   <p className="text-xs text-muted-foreground">
                     {formatDate(calculation.created_at)}
                   </p>
