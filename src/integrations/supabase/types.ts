@@ -13370,6 +13370,10 @@ export type Database = {
         Args: { p_product: string; p_user_id: string }
         Returns: boolean
       }
+      has_role_by_name: {
+        Args: { _role_name: string; _user_id: string }
+        Returns: boolean
+      }
       increment_ai_rate_limit: {
         Args: {
           p_app_id: string
@@ -13382,6 +13386,10 @@ export type Database = {
           requests_remaining: number
           reset_at: string
         }[]
+      }
+      is_org_member: {
+        Args: { _org_id: string; _user_id: string }
+        Returns: boolean
       }
       log_admin_action: {
         Args: {
