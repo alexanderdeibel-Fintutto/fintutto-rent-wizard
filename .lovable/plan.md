@@ -1,129 +1,183 @@
 
+# Stripe Subscription Integration Plan
 
-# Fintutto Rendite-Rechner - Implementierungsplan
+## Uebersicht
 
-## Projektübersicht
-Eine professionelle Immobilien-Investment-Analyse-App mit Live-Berechnungen, Datenvisualisierung und persönlicher Speicherfunktion. Die App funktioniert im Gastmodus, das Speichern von Berechnungen erfordert einen Account.
-
----
-
-## Phase 1: Design-System & Grundstruktur
-
-### Farbschema & Typografie
-- Indigo (#4F46E5) als Hauptfarbe, Violett (#7C3AED) als Akzent
-- Hero-Gradient für Premium-Look
-- Inter-Font für UI, JetBrains Mono für Zahlen (bessere Lesbarkeit)
-- Ampel-System mit 5 Stufen für Rendite-Bewertung
-
-### Layout
-- Responsive Zweispalten-Layout (Desktop: 60/40)
-- Mobile: Sticky-Footer für Ergebnisse während des Scrollens
-- Dark Mode mit angepassten Farbvarianten
+Diese Integration fuegt Subscription-Payments mit Stripe zu Fintutto hinzu, inklusive Pricing-Seite, Checkout-Flow, Webhook-Handling und Feature-Gating.
 
 ---
 
-## Phase 2: Rechner-Eingabebereich
+## Phase 1: Voraussetzungen
 
-### Sektion 1: Kaufdaten
-- Kaufpreis mit Währungsformatierung
-- Bundesland-Dropdown mit automatischer Grunderwerbsteuer (3,5% - 6,5%)
-- Vorausgefüllte Nebenkosten (Notar 1,5%, Makler 3,57%, Grundbuch 0,5%)
+### 1.1 Stripe aktivieren
+- Lovable's Stripe-Integration aktivieren (erforderlich fuer Secret Key)
+- Stripe Public Key als Environment Variable hinzufuegen
 
-### Sektion 2: Mieteinnahmen
-- Kaltmiete und Nebenkosten-Vorauszahlung
-- Mietausfallwagnis (Default 2%)
+### 1.2 Datenbank-Setup
+Neue Tabelle `user_subscriptions` in Supabase erstellen:
 
-### Sektion 3: Laufende Kosten
-- Verwaltungskosten monatlich
-- Instandhaltungsrücklage pro m²/Jahr
-- Nicht umlagefähige Nebenkosten
+```text
++------------------------+
+| user_subscriptions     |
++------------------------+
+| id (UUID, PK)          |
+| user_id (FK -> auth)   |
+| stripe_customer_id     |
+| stripe_subscription_id |
+| app_id                 |
+| plan_id                |
+| status                 |
+| current_period_start   |
+| current_period_end     |
+| cancel_at_period_end   |
+| created_at             |
+| updated_at             |
++------------------------+
+```
 
-### Sektion 4: Finanzierung
-- Eigenkapital-Eingabe
-- Automatische oder manuelle Darlehenssummen-Berechnung
-- Zinssatz, Tilgungssatz und Zinsbindung
-
----
-
-## Phase 3: Live-Ergebnis-Bereich
-
-### Kennzahlen-Dashboard
-- 6 farbcodierte Karten mit Ampel-System:
-  - Brutto-Mietrendite
-  - Netto-Mietrendite
-  - Eigenkapital-Rendite
-  - Monatlicher Cashflow (grün/rot je nach Vorzeichen)
-  - Kaufpreis-Faktor
-  - Gesamtinvestition
-
-### Visualisierungen (Charts)
-- **Cashflow-Entwicklung**: Liniendiagramm über 10 Jahre
-- **Tilgungsplan**: Balkendiagramm (Zins vs. Tilgung pro Jahr)
-- **Kosten-Aufschlüsselung**: Donut-Chart für Kaufnebenkosten
-
-### Detail-Tabellen (aufklappbar)
-- Kaufnebenkosten-Aufstellung
-- Jährliche Einnahmen/Ausgaben
-- Tilgungsplan der ersten 5 Jahre
+RLS Policies:
+- Users koennen nur eigene Subscriptions lesen
+- Service Role kann alle Operationen ausfuehren (fuer Webhook)
 
 ---
 
-## Phase 4: Authentifizierung
+## Phase 2: Backend (Edge Functions)
 
-### Funktionen
-- Email/Passwort Registrierung & Login
-- "Passwort vergessen" mit Email-Link
-- Persistente Session
+### 2.1 Edge Function: create-checkout-session
+Erstellt Stripe Checkout Session fuer neue Subscriptions.
 
-### User Experience
-- Rechner komplett nutzbar ohne Login
-- Sanfter Hinweis beim Speichern-Versuch ohne Account
-- Schneller Modal-Login ohne Seitenwechsel
+Eingabe: priceId, userId, userEmail, successUrl, cancelUrl
+Ausgabe: Stripe Checkout URL
+
+### 2.2 Edge Function: create-portal-session
+Erstellt Stripe Customer Portal Session fuer bestehendes Abo-Management.
+
+### 2.3 Edge Function: stripe-webhook
+Verarbeitet Stripe Events:
+- `checkout.session.completed` -> Subscription erstellen
+- `customer.subscription.updated` -> Status aktualisieren
+- `customer.subscription.deleted` -> Subscription beenden
 
 ---
 
-## Phase 5: Speicher-Funktionalität
+## Phase 3: Frontend-Komponenten
 
-### Berechnung speichern
-- Modal mit Namenseingabe
-- Speichert alle Eingaben + berechnete Ergebnisse
-- Zeitstempel für Sortierung
+### 3.1 Neue Dateien
 
-### "Meine Berechnungen" Seite
-- Übersichtliche Liste mit Vorschau (Name, Kaufpreis, Rendite)
-- Sortierung nach Datum
-- Aktionen: Laden, Duplizieren, Löschen
-- Nur sichtbar für eingeloggte User
+```text
+src/
+├── pages/
+│   ├── Pricing.tsx          # Pricing-Seite
+│   └── Success.tsx          # Erfolgsseite nach Zahlung
+├── components/
+│   ├── pricing/
+│   │   ├── PricingCard.tsx  # Einzelne Plan-Karte
+│   │   └── BillingToggle.tsx # Monatlich/Jaehrlich Toggle
+│   └── subscription/
+│       └── UpgradePrompt.tsx # Upgrade-Hinweis fuer gesperrte Features
+├── hooks/
+│   └── useSubscription.ts   # Hook fuer Subscription-Status
+├── lib/
+│   └── stripe.ts            # Stripe-Hilfsfunktionen
+└── types/
+    └── subscription.ts      # TypeScript-Typen
+```
 
-### Datenbank (manuell in Supabase einzurichten)
-- `calculations` Tabelle mit JSONB für flexible Datenspeicherung
-- Row Level Security: Jeder User sieht nur eigene Berechnungen
+### 3.2 Pricing-Seite Features
+- Toggle zwischen monatlicher und jaehrlicher Abrechnung
+- 3 Plan-Karten: Free, Pro, Business
+- Dynamische Button-Logik basierend auf Auth-Status und aktuellem Plan
+- Responsive Design (Cards nebeneinander auf Desktop, gestapelt auf Mobile)
+
+### 3.3 Success-Seite
+- Konfetti-Animation
+- Erfolgsmeldung
+- Button zur App-Rueckkehr
+
+---
+
+## Phase 4: Feature-Gating
+
+### 4.1 useSubscription Hook
+```text
+Gibt zurueck:
+- subscription: Aktuelle Subscription-Daten
+- plan: 'free' | 'pro' | 'business'
+- isPro: boolean
+- isBusiness: boolean
+- isActive: boolean
+- loading: boolean
+```
+
+### 4.2 UpgradePrompt Komponente
+Zeigt Upgrade-Hinweis wenn User auf gesperrte Features zugreift:
+- Lock-Icon
+- Feature-Beschreibung
+- Button zur Pricing-Seite
+
+---
+
+## Phase 5: Integration
+
+### 5.1 Routing (App.tsx)
+Neue Routes hinzufuegen:
+- `/pricing` -> Pricing.tsx
+- `/success` -> Success.tsx
+
+### 5.2 Header Navigation
+- "Preise" Link hinzufuegen
+- Account-Dropdown mit "Abo verwalten" Option
+
+### 5.3 Beispiel Feature-Gating
+In der Berechnungen-Seite: Unbegrenzte Berechnungen nur fuer Pro/Business
 
 ---
 
 ## Technische Details
 
-### Berechnungsformeln (mathematisch korrekt)
-```
-Brutto-Rendite = (Jahreskaltmiete / Kaufpreis) × 100
-Netto-Rendite = ((Jahreskaltmiete - Jahreskosten) / Gesamtinvestition) × 100
-EK-Rendite = ((Jahreskaltmiete - Jahreskosten - Zinskosten) / Eigenkapital) × 100
-Cashflow = Monatsmiete - Verwaltung - Instandhaltung - Monatsrate
-Faktor = Kaufpreis / Jahreskaltmiete
-```
+### Pricing-Struktur (konfigurierbar)
 
-### Grunderwerbsteuer nach Bundesland
-- Bayern, Sachsen: 3,5%
-- Brandenburg, Schleswig-Holstein, Thüringen, NRW: 6,5%
-- Andere Bundesländer: 5,0% - 6,0%
+| Plan     | Monat | Jahr (20% Rabatt) | Features                        |
+|----------|-------|-------------------|----------------------------------|
+| Free     | 0 EUR   | 0 EUR               | 3 Berechnungen, Basic Features |
+| Pro      | 9,99 EUR| 95,90 EUR           | Unbegrenzt, Export, Charts     |
+| Business | 29,99 EUR| 287,90 EUR          | Alles + Team-Features          |
+
+### Edge Function CORS-Headers
+Alle Edge Functions benoetigen CORS-Headers fuer Web-Zugriff.
+
+### Webhook-Sicherheit
+- Signature-Verification mit STRIPE_WEBHOOK_SECRET
+- Idempotente Updates
 
 ---
 
-## Ergebnis
-Eine professionelle, responsive Investment-Analyse-App mit:
-- ✅ Intuitivem Rechner mit Live-Updates
-- ✅ Übersichtlichen Visualisierungen
-- ✅ Persönlicher Speicherfunktion
-- ✅ Sicherem Authentifizierungssystem
-- ✅ Komplett deutscher Benutzeroberfläche
+## Reihenfolge der Implementierung
+
+1. Stripe aktivieren und Secrets konfigurieren
+2. Datenbank-Migration erstellen
+3. TypeScript-Typen definieren
+4. Edge Functions erstellen (checkout, portal, webhook)
+5. useSubscription Hook implementieren
+6. Pricing-Seite erstellen
+7. Success-Seite erstellen
+8. UpgradePrompt Komponente erstellen
+9. Routing und Navigation aktualisieren
+10. Feature-Gating in bestehende Komponenten integrieren
+11. End-to-End Testing
+
+---
+
+## Notwendige Secrets (Supabase)
+
+| Name                    | Beschreibung                    |
+|-------------------------|---------------------------------|
+| STRIPE_SECRET_KEY       | Stripe API Secret Key           |
+| STRIPE_WEBHOOK_SECRET   | Webhook Signing Secret          |
+
+## Environment Variable (Frontend)
+
+| Name                      | Beschreibung            |
+|---------------------------|-------------------------|
+| VITE_STRIPE_PUBLIC_KEY    | Stripe Publishable Key  |
 
