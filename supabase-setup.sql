@@ -106,6 +106,19 @@ CREATE POLICY "Users can insert own subscriptions" ON public.user_subscriptions
   TO authenticated
   WITH CHECK (auth.uid() = user_id);
 
+-- Policy: User kann eigene Subscriptions aktualisieren
+CREATE POLICY "Users can update own subscriptions" ON public.user_subscriptions
+  FOR UPDATE
+  TO authenticated
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- Policy: User kann eigene Subscriptions löschen
+CREATE POLICY "Users can delete own subscriptions" ON public.user_subscriptions
+  FOR DELETE
+  TO authenticated
+  USING (auth.uid() = user_id);
+
 -- 10. Trigger für automatisches updated_at bei Subscriptions
 CREATE TRIGGER update_user_subscriptions_updated_at
   BEFORE UPDATE ON public.user_subscriptions
