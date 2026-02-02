@@ -1,15 +1,27 @@
-import { Moon, Sun, LogIn, LogOut, Calculator, FolderOpen, User } from 'lucide-react';
+import { Moon, Sun, LogIn, LogOut, Calculator, FolderOpen, CreditCard, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { createPortalSession } from '@/lib/stripe';
+import { useSubscription } from '@/hooks/useSubscription';
+import { useToast } from '@/hooks/use-toast';
 
 interface HeaderProps {
   onLoginClick: () => void;
 }
 
 export const Header = ({ onLoginClick }: HeaderProps) => {
-  const { user, signOut, isConfigured } = useAuth();
+  const { user, signOut } = useAuth();
+  const { subscription, plan } = useSubscription();
+  const { toast } = useToast();
   const location = useLocation();
   const [isDark, setIsDark] = useState(false);
 
@@ -21,6 +33,19 @@ export const Header = ({ onLoginClick }: HeaderProps) => {
   const toggleDarkMode = () => {
     document.documentElement.classList.toggle('dark');
     setIsDark(!isDark);
+  };
+
+  const handleManageSubscription = async () => {
+    const result = await createPortalSession(window.location.href);
+    if ('error' in result) {
+      toast({
+        title: 'Fehler',
+        description: result.error,
+        variant: 'destructive'
+      });
+      return;
+    }
+    window.location.href = result.url;
   };
 
   return (
@@ -51,6 +76,15 @@ export const Header = ({ onLoginClick }: HeaderProps) => {
               Meine Berechnungen
             </Link>
           )}
+          <Link
+            to="/pricing"
+            className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary ${
+              location.pathname === '/pricing' ? 'text-primary' : 'text-muted-foreground'
+            }`}
+          >
+            <CreditCard className="h-4 w-4" />
+            Preise
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -59,15 +93,39 @@ export const Header = ({ onLoginClick }: HeaderProps) => {
           </Button>
 
           {user ? (
-            <div className="flex items-center gap-2">
-              <span className="hidden sm:inline text-sm text-muted-foreground">
-                {user.email}
-              </span>
-              <Button variant="outline" size="sm" onClick={signOut}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Abmelden
-              </Button>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Settings className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline max-w-32 truncate">
+                    {user.email}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem disabled className="text-xs text-muted-foreground">
+                  Plan: {plan === 'business' ? 'Business' : plan === 'pro' ? 'Pro' : 'Free'}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                {subscription?.stripe_subscription_id && (
+                  <DropdownMenuItem onClick={handleManageSubscription}>
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    Abo verwalten
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem asChild>
+                  <Link to="/pricing">
+                    <CreditCard className="h-4 w-4 mr-2" />
+                    {plan === 'free' ? 'Upgrade' : 'Pläne ansehen'}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={signOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Abmelden
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           ) : (
             <Button onClick={onLoginClick} size="sm">
               <LogIn className="h-4 w-4 mr-2" />
