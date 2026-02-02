@@ -4,12 +4,16 @@ import { Header } from '@/components/Header';
 import { AuthModal } from '@/components/AuthModal';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 import { supabase } from '@/lib/supabase';
-import { Loader2, Trash2, Copy, ArrowRight, FolderOpen } from 'lucide-react';
+import { Loader2, Trash2, Copy, ArrowRight, FolderOpen, Crown } from 'lucide-react';
 import { formatCurrency, formatNumber } from '@/hooks/useCalculator';
 import type { SavedCalculation } from '@/types/calculator';
 import { useToast } from '@/hooks/use-toast';
+import { PLAN_LIMITS } from '@/lib/subscriptionLimits';
 import { getGenericErrorMessage, CALCULATION_NAME_MAX_LENGTH } from '@/lib/errorHandler';
 import {
   AlertDialog,
@@ -24,12 +28,16 @@ import {
 
 const Berechnungen = () => {
   const { user, loading: authLoading } = useAuth();
+  const { plan, isPro, loading: subLoading } = useSubscription();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [calculations, setCalculations] = useState<SavedCalculation[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  
+  const maxCalcs = PLAN_LIMITS[plan]?.maxCalculations || 3;
+  const usagePercent = maxCalcs === Infinity ? 0 : (calculations.length / maxCalcs) * 100;
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -150,7 +158,7 @@ const Berechnungen = () => {
     });
   };
 
-  if (authLoading || loading) {
+  if (authLoading || loading || subLoading) {
     return (
       <div className="min-h-screen bg-background">
         <Header onLoginClick={() => setShowAuthModal(true)} />
@@ -167,10 +175,43 @@ const Berechnungen = () => {
 
       <main className="container py-6">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">Meine Berechnungen</h1>
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-2xl font-bold">Meine Berechnungen</h1>
+            <Badge variant={isPro ? 'default' : 'secondary'}>
+              {plan === 'free' ? 'Free' : plan === 'pro' ? 'Pro' : 'Business'}
+            </Badge>
+          </div>
           <p className="text-muted-foreground">
             Alle deine gespeicherten Immobilien-Berechnungen
           </p>
+          
+          {/* Usage indicator for free plan */}
+          {plan === 'free' && (
+            <div className="mt-4 p-4 bg-muted rounded-lg">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-sm font-medium">
+                  Speicherplätze: {calculations.length} / {maxCalcs}
+                </span>
+                {calculations.length >= maxCalcs && (
+                  <Button 
+                    size="sm" 
+                    variant="default"
+                    onClick={() => navigate('/pricing')}
+                    className="gradient-primary"
+                  >
+                    <Crown className="h-4 w-4 mr-1" />
+                    Upgrade
+                  </Button>
+                )}
+              </div>
+              <Progress value={usagePercent} className="h-2" />
+              {calculations.length >= maxCalcs - 1 && calculations.length < maxCalcs && (
+                <p className="text-xs text-muted-foreground mt-2">
+                  Noch 1 Speicherplatz frei. Upgrade für unbegrenzte Berechnungen.
+                </p>
+              )}
+            </div>
+          )}
         </div>
 
         {calculations.length === 0 ? (
