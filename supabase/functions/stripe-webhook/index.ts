@@ -73,12 +73,19 @@ serve(async (req) => {
       return customer.metadata?.supabase_user_id || null
     }
 
-    // Helper to map Stripe price to plan_id
+    // Helper to map Stripe price to plan_id using exact price IDs
     const getPlanFromPrice = (priceId: string): string => {
-      // Map your Stripe price IDs to plan names
-      // Update these with your actual price IDs
-      if (priceId.includes('business')) return 'business'
-      if (priceId.includes('pro')) return 'pro'
+      // Business prices (monthly and yearly)
+      if (priceId === 'price_1SwLLt52lqSgjCzePeTla42F' || 
+          priceId === 'price_1SwLMC52lqSgjCzelkWAWdw8') {
+        return 'business'
+      }
+      // Pro prices (monthly and yearly)
+      if (priceId === 'price_1SwLDt52lqSgjCzeYslwpr6I' || 
+          priceId === 'price_1SwLLb52lqSgjCze6Gdp9SIz') {
+        return 'pro'
+      }
+      console.warn('Unknown price ID:', priceId)
       return 'free'
     }
 
