@@ -8054,6 +8054,7 @@ export type Database = {
           id: string
           last_login_at: string | null
           role: string
+          status: string | null
           updated_at: string
         }
         Insert: {
@@ -8064,6 +8065,7 @@ export type Database = {
           id: string
           last_login_at?: string | null
           role?: string
+          status?: string | null
           updated_at?: string
         }
         Update: {
@@ -8074,6 +8076,7 @@ export type Database = {
           id?: string
           last_login_at?: string | null
           role?: string
+          status?: string | null
           updated_at?: string
         }
         Relationships: []
