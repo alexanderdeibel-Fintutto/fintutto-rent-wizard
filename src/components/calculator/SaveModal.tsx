@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Loader2, Save, Crown } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/hooks/useSubscription';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import type { CalculatorInputs, CalculatorResults } from '@/types/calculator';
 import { useToast } from '@/hooks/use-toast';
 import { getGenericErrorMessage, validateCalculationName, CALCULATION_NAME_MAX_LENGTH } from '@/lib/errorHandler';
@@ -34,7 +34,7 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
   // Fetch calculation count when modal opens
   useEffect(() => {
     const fetchCount = async () => {
-      if (!user || !supabase || !isOpen) {
+      if (!user || !isOpen) {
         setCountLoading(false);
         return;
       }
@@ -89,21 +89,13 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
       return;
     }
 
-    if (!supabase) {
-      toast({
-        title: 'Fehler',
-        description: 'Backend ist nicht konfiguriert.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
     setLoading(true);
 
     try {
       const sanitizedName = name.trim().slice(0, CALCULATION_NAME_MAX_LENGTH);
       
-      const { error } = await supabase.from('calculations').insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('calculations') as any).insert({
         user_id: user.id,
         name: sanitizedName,
         input_data: inputs,

@@ -1,6 +1,6 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_URL = 'https://aaefocdqgdgexkcrjhks.supabase.co';
 
 export const createCheckoutSession = async (
   priceId: string,
@@ -9,10 +9,6 @@ export const createCheckoutSession = async (
   successUrl: string,
   cancelUrl: string
 ): Promise<{ url: string } | { error: string }> => {
-  if (!supabase || !SUPABASE_URL) {
-    return { error: 'Supabase nicht konfiguriert' };
-  }
-
   try {
     const { data: { session } } = await supabase.auth.getSession();
     
@@ -47,10 +43,6 @@ export const createCheckoutSession = async (
 export const createPortalSession = async (
   returnUrl: string
 ): Promise<{ url: string } | { error: string }> => {
-  if (!supabase || !SUPABASE_URL) {
-    return { error: 'Supabase nicht konfiguriert' };
-  }
-
   try {
     const { data: { session } } = await supabase.auth.getSession();
     
