@@ -7,10 +7,21 @@ export const getGenericErrorMessage = (error: unknown, context: 'auth' | 'save' 
     console.error(`[${context}] Error:`, error);
   }
 
+  // Check for specific Supabase auth errors
+  if (context === 'auth' && error && typeof error === 'object') {
+    const authError = error as { code?: string; message?: string };
+    if (authError.code === 'invalid_credentials') {
+      return 'Anmeldung fehlgeschlagen. Bitte überprüfe E-Mail und Passwort. Falls du dich gerade registriert hast, bestätige bitte zuerst deine E-Mail-Adresse.';
+    }
+    if (authError.code === 'email_not_confirmed') {
+      return 'Bitte bestätige zuerst deine E-Mail-Adresse. Prüfe dein Postfach (auch den Spam-Ordner).';
+    }
+  }
+
   // Return context-appropriate generic messages
   switch (context) {
     case 'auth':
-      return 'Bei der Anmeldung ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.';
+      return 'Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es später erneut.';
     case 'save':
       return 'Die Berechnung konnte nicht gespeichert werden. Bitte versuche es später erneut.';
     case 'load':
