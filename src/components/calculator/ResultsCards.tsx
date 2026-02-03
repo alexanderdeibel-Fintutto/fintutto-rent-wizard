@@ -28,49 +28,49 @@ export const ResultsCards = ({ results }: ResultsCardsProps) => {
       {/* Brutto-Mietrendite */}
       <Card className={`${getYieldColorClass(bruttoRating)} border-0`}>
         <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-2 opacity-90">
+          <div className="flex items-center gap-2 mb-2">
             <Percent className="h-4 w-4" />
             <span className="text-xs font-medium">Brutto-Rendite</span>
           </div>
           <div className="font-mono text-2xl font-bold">
             {formatNumber(results.bruttoMietrendite)}%
           </div>
-          <div className="text-xs mt-1 opacity-80">{getYieldLabel(bruttoRating)}</div>
+          <div className="text-xs mt-1">{getYieldLabel(bruttoRating)}</div>
         </CardContent>
       </Card>
 
       {/* Netto-Mietrendite */}
       <Card className={`${getYieldColorClass(nettoRating)} border-0`}>
         <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-2 opacity-90">
+          <div className="flex items-center gap-2 mb-2">
             <Percent className="h-4 w-4" />
             <span className="text-xs font-medium">Netto-Rendite</span>
           </div>
           <div className="font-mono text-2xl font-bold">
             {formatNumber(results.nettoMietrendite)}%
           </div>
-          <div className="text-xs mt-1 opacity-80">{getYieldLabel(nettoRating)}</div>
+          <div className="text-xs mt-1">{getYieldLabel(nettoRating)}</div>
         </CardContent>
       </Card>
 
       {/* Eigenkapital-Rendite */}
       <Card className={`${getYieldColorClass(ekRating)} border-0`}>
         <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-2 opacity-90">
+          <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="h-4 w-4" />
             <span className="text-xs font-medium">EK-Rendite</span>
           </div>
           <div className="font-mono text-2xl font-bold">
             {formatNumber(results.eigenkapitalRendite)}%
           </div>
-          <div className="text-xs mt-1 opacity-80">{getYieldLabel(ekRating)}</div>
+          <div className="text-xs mt-1">{getYieldLabel(ekRating)}</div>
         </CardContent>
       </Card>
 
       {/* Monatlicher Cashflow */}
       <Card className={`${results.monatlicheCashflow >= 0 ? 'bg-success' : 'bg-destructive'} text-white border-0`}>
         <CardContent className="p-4">
-          <div className="flex items-center gap-2 mb-2 opacity-90">
+          <div className="flex items-center gap-2 mb-2">
             {results.monatlicheCashflow >= 0 ? (
               <TrendingUp className="h-4 w-4" />
             ) : (
@@ -81,7 +81,7 @@ export const ResultsCards = ({ results }: ResultsCardsProps) => {
           <div className="font-mono text-2xl font-bold">
             {formatCurrency(results.monatlicheCashflow)}
           </div>
-          <div className="text-xs mt-1 opacity-80">
+          <div className="text-xs mt-1">
             {results.monatlicheCashflow >= 0 ? 'Positiv' : 'Negativ'}
           </div>
         </CardContent>
