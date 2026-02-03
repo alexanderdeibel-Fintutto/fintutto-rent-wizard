@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { UserSubscription, PlanId } from '@/types/subscription';
 
 interface UseSubscriptionReturn {
@@ -21,19 +21,20 @@ export const useSubscription = (): UseSubscriptionReturn => {
   const [loading, setLoading] = useState(true);
 
   const fetchSubscription = async () => {
-    if (!user || !supabase) {
+    if (!user) {
       setSubscription(null);
       setLoading(false);
       return;
     }
 
-    try {
-      const { data, error } = await supabase
-        .from('user_subscriptions')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('app_id', APP_ID)
-        .maybeSingle();
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase as any)
+          .from('user_subscriptions')
+          .select('*')
+          .eq('user_id', user.id)
+          .eq('app_id', APP_ID)
+          .maybeSingle();
 
       if (error) {
         console.error('Error fetching subscription:', error);

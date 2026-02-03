@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSubscription } from '@/hooks/useSubscription';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Trash2, Copy, ArrowRight, FolderOpen, Crown } from 'lucide-react';
 import { formatCurrency, formatNumber } from '@/hooks/useCalculator';
 import type { SavedCalculation } from '@/types/calculator';
@@ -47,20 +47,21 @@ const Berechnungen = () => {
 
   useEffect(() => {
     const fetchCalculations = async () => {
-      if (!user || !supabase) {
+      if (!user) {
         setLoading(false);
         return;
       }
 
       try {
-        const { data, error } = await supabase
-          .from('calculations')
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase
+          .from('calculations') as any)
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
 
         if (error) throw error;
-        setCalculations(data || []);
+        setCalculations((data || []) as SavedCalculation[]);
       } catch (error: unknown) {
         toast({
           title: 'Fehler',
@@ -88,10 +89,11 @@ const Berechnungen = () => {
   };
 
   const handleDuplicate = async (calculation: SavedCalculation) => {
-    if (!user || !supabase) return;
+    if (!user) return;
 
     try {
-      const { error } = await supabase.from('calculations').insert({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { error } = await (supabase.from('calculations') as any).insert({
         user_id: user.id,
         name: `${calculation.name} (Kopie)`,
         input_data: calculation.input_data,
@@ -101,13 +103,14 @@ const Berechnungen = () => {
       if (error) throw error;
 
       // Refresh list
-      const { data } = await supabase
-        .from('calculations')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data } = await (supabase
+        .from('calculations') as any)
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      setCalculations(data || []);
+      setCalculations((data || []) as SavedCalculation[]);
       toast({
         title: 'Dupliziert',
         description: `"${calculation.name}" wurde kopiert.`,
@@ -122,7 +125,7 @@ const Berechnungen = () => {
   };
 
   const handleDelete = async () => {
-    if (!deleteId || !supabase) return;
+    if (!deleteId) return;
 
     try {
       const { error } = await supabase
