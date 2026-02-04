@@ -1,4 +1,11 @@
 export interface CalculatorInputs {
+  // Adresse (Google Maps verifiziert)
+  adresse: string;
+  adresseVerifiziert: boolean;
+  placeId: string;
+  latitude: number | null;
+  longitude: number | null;
+
   // Kaufdaten
   kaufpreis: number;
   bundesland: string;

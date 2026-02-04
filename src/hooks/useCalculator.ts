@@ -2,6 +2,13 @@ import { useMemo } from 'react';
 import type { CalculatorInputs, CalculatorResults, TilgungsplanJahr, CashflowJahr, YieldRating } from '@/types/calculator';
 
 export const getDefaultInputs = (): CalculatorInputs => ({
+  // Adresse
+  adresse: '',
+  adresseVerifiziert: false,
+  placeId: '',
+  latitude: null,
+  longitude: null,
+  // Kaufdaten
   kaufpreis: 250000,
   bundesland: 'Bayern',
   grunderwerbsteuer: 3.5,
