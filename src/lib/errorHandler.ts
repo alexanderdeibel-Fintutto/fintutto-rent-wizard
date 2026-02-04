@@ -9,12 +9,18 @@ export const getGenericErrorMessage = (error: unknown, context: 'auth' | 'save' 
 
   // Check for specific Supabase auth errors
   if (context === 'auth' && error && typeof error === 'object') {
-    const authError = error as { code?: string; message?: string };
+    const authError = error as { code?: string; message?: string; status?: number };
     if (authError.code === 'invalid_credentials') {
       return 'Anmeldung fehlgeschlagen. Bitte überprüfe E-Mail und Passwort. Falls du dich gerade registriert hast, bestätige bitte zuerst deine E-Mail-Adresse.';
     }
     if (authError.code === 'email_not_confirmed') {
       return 'Bitte bestätige zuerst deine E-Mail-Adresse. Prüfe dein Postfach (auch den Spam-Ordner).';
+    }
+    if (authError.code === 'request_timeout' || authError.status === 504 || authError.message?.includes('timeout')) {
+      return 'Die Anfrage hat zu lange gedauert. Bitte versuche es in wenigen Sekunden erneut.';
+    }
+    if (authError.code === 'user_already_exists' || authError.message?.includes('already registered')) {
+      return 'Diese E-Mail-Adresse ist bereits registriert. Bitte melde dich an oder nutze "Passwort vergessen".';
     }
   }
 
