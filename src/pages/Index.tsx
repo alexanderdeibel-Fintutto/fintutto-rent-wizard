@@ -6,6 +6,7 @@ import { ResultsCards } from '@/components/calculator/ResultsCards';
 import { ResultsCharts } from '@/components/calculator/ResultsCharts';
 import { ResultsTables } from '@/components/calculator/ResultsTables';
 import { SaveModal } from '@/components/calculator/SaveModal';
+import { CrossSellBanner } from '@/components/CrossSellBanner';
 import { Button } from '@/components/ui/button';
 import { Save, RotateCcw } from 'lucide-react';
 import { useCalculator, getDefaultInputs } from '@/hooks/useCalculator';
@@ -77,6 +78,9 @@ const Index = () => {
             <ResultsCharts results={results} />
             
             <ResultsTables results={results} />
+            
+            {/* Cross-Sell Banner */}
+            <CrossSellBanner />
           </div>
         </div>
       </main>
