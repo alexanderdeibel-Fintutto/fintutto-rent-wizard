@@ -6,6 +6,8 @@ import { Switch } from '@/components/ui/switch';
 import { Home, Wallet, CreditCard, PiggyBank } from 'lucide-react';
 import type { CalculatorInputs } from '@/types/calculator';
 import { BUNDESLAENDER } from '@/types/calculator';
+import { AddressAutocomplete } from './AddressAutocomplete';
+import type { AddressComponents } from '@/hooks/useGoogleMapsAutocomplete';
 
 interface CalculatorInputsProps {
   inputs: CalculatorInputs;
@@ -13,7 +15,7 @@ interface CalculatorInputsProps {
 }
 
 export const CalculatorInputsSection = ({ inputs, onChange }: CalculatorInputsProps) => {
-  const handleChange = (field: keyof CalculatorInputs, value: number | string | boolean) => {
+  const handleChange = (field: keyof CalculatorInputs, value: number | string | boolean | null) => {
     const newInputs = { ...inputs, [field]: value };
     
     // Auto-update Grunderwerbsteuer bei Bundesland-Wechsel
@@ -27,6 +29,41 @@ export const CalculatorInputsSection = ({ inputs, onChange }: CalculatorInputsPr
   const handleNumberChange = (field: keyof CalculatorInputs, value: string) => {
     const numValue = parseFloat(value) || 0;
     handleChange(field, numValue);
+  };
+
+  const handleAddressSelect = (address: AddressComponents) => {
+    // Map German state names to the bundesland selector
+    const stateMapping: Record<string, string> = {
+      'Baden-Württemberg': 'Baden-Württemberg',
+      'Bayern': 'Bayern',
+      'Berlin': 'Berlin',
+      'Brandenburg': 'Brandenburg',
+      'Bremen': 'Bremen',
+      'Hamburg': 'Hamburg',
+      'Hessen': 'Hessen',
+      'Mecklenburg-Vorpommern': 'Mecklenburg-Vorpommern',
+      'Niedersachsen': 'Niedersachsen',
+      'Nordrhein-Westfalen': 'Nordrhein-Westfalen',
+      'Rheinland-Pfalz': 'Rheinland-Pfalz',
+      'Saarland': 'Saarland',
+      'Sachsen': 'Sachsen',
+      'Sachsen-Anhalt': 'Sachsen-Anhalt',
+      'Schleswig-Holstein': 'Schleswig-Holstein',
+      'Thüringen': 'Thüringen',
+    };
+
+    const bundesland = stateMapping[address.state] || inputs.bundesland;
+    
+    onChange({
+      ...inputs,
+      adresse: address.formattedAddress,
+      adresseVerifiziert: true,
+      placeId: address.placeId,
+      latitude: address.latitude,
+      longitude: address.longitude,
+      bundesland,
+      grunderwerbsteuer: BUNDESLAENDER[bundesland] || inputs.grunderwerbsteuer,
+    });
   };
 
   return (
@@ -43,6 +80,29 @@ export const CalculatorInputsSection = ({ inputs, onChange }: CalculatorInputsPr
             </div>
           </AccordionTrigger>
           <AccordionContent className="space-y-4 pb-4">
+            {/* Google Maps Adress-Autocomplete */}
+            <AddressAutocomplete
+              value={inputs.adresse}
+              onAddressSelect={handleAddressSelect}
+              onInputChange={(value) => {
+                // Reset verification if user types manually
+                if (inputs.adresseVerifiziert && value !== inputs.adresse) {
+                  onChange({
+                    ...inputs,
+                    adresse: value,
+                    adresseVerifiziert: false,
+                    placeId: '',
+                    latitude: null,
+                    longitude: null,
+                  });
+                } else {
+                  handleChange('adresse', value);
+                }
+              }}
+              isVerified={inputs.adresseVerifiziert}
+              verifiedAddress={inputs.adresseVerifiziert ? inputs.adresse : undefined}
+            />
+
             <div className="space-y-2">
               <Label htmlFor="kaufpreis">Kaufpreis (€)</Label>
               <Input
