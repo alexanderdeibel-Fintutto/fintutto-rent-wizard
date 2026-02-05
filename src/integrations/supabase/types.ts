@@ -13526,8 +13526,6 @@ export type Database = {
         }
         Returns: string
       }
-      show_limit: { Args: never; Returns: number }
-      show_trgm: { Args: { "": string }; Returns: string[] }
       suggest_new_prepayment: {
         Args: {
           p_buffer_percent?: number
