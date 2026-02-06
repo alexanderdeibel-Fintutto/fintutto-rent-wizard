@@ -8,12 +8,12 @@ interface ResultsChartsProps {
 }
 
 const COLORS = {
-  primary: 'hsl(239, 84%, 67%)',
-  secondary: 'hsl(263, 70%, 50%)',
-  success: 'hsl(160, 84%, 39%)',
-  warning: 'hsl(38, 92%, 50%)',
-  destructive: 'hsl(0, 84%, 60%)',
-  muted: 'hsl(240, 4%, 46%)',
+  primary: 'hsl(42, 92%, 50%)',
+  secondary: 'hsl(28, 65%, 45%)',
+  success: 'hsl(152, 69%, 31%)',
+  warning: 'hsl(25, 95%, 53%)',
+  destructive: 'hsl(0, 72%, 51%)',
+  muted: 'hsl(30, 12%, 45%)',
 };
 
 export const ResultsCharts = ({ results }: ResultsChartsProps) => {

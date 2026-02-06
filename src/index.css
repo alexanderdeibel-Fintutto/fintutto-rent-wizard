@@ -4,111 +4,111 @@
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 234 16% 15%;
+    --background: 40 20% 96%;
+    --foreground: 30 20% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 234 16% 15%;
+    --card: 40 30% 99%;
+    --card-foreground: 30 20% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 234 16% 15%;
+    --popover: 40 30% 99%;
+    --popover-foreground: 30 20% 12%;
 
-    --primary: 239 84% 58%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 42 92% 50%;
+    --primary-foreground: 30 20% 8%;
 
-    --secondary: 263 70% 50%;
+    --secondary: 28 65% 45%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 240 5% 96%;
-    --muted-foreground: 240 4% 46%;
+    --muted: 38 18% 92%;
+    --muted-foreground: 30 12% 45%;
 
-    --accent: 263 70% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 42 85% 55%;
+    --accent-foreground: 30 20% 8%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%;
+    --success: 152 69% 31%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
+    --warning: 25 95% 53%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 240 6% 90%;
-    --input: 240 6% 90%;
-    --ring: 239 84% 67%;
+    --border: 38 18% 85%;
+    --input: 38 18% 85%;
+    --ring: 42 92% 50%;
 
     --radius: 0.75rem;
 
     /* Yield rating colors */
-    --yield-excellent: 160 84% 39%;
-    --yield-good: 142 71% 45%;
-    --yield-ok: 48 96% 53%;
-    --yield-weak: 38 92% 50%;
-    --yield-bad: 0 84% 60%;
+    --yield-excellent: 152 69% 31%;
+    --yield-good: 142 60% 40%;
+    --yield-ok: 42 92% 50%;
+    --yield-weak: 25 90% 50%;
+    --yield-bad: 0 72% 51%;
 
     /* Gradient */
-    --gradient-primary: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(263, 70%, 50%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(42, 92%, 50%) 0%, hsl(28, 65%, 45%) 100%);
 
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 239 84% 67%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 239 84% 67%;
+    --sidebar-background: 40 20% 96%;
+    --sidebar-foreground: 30 12% 26%;
+    --sidebar-primary: 42 92% 50%;
+    --sidebar-primary-foreground: 30 20% 8%;
+    --sidebar-accent: 38 18% 92%;
+    --sidebar-accent-foreground: 30 12% 10%;
+    --sidebar-border: 38 18% 85%;
+    --sidebar-ring: 42 92% 50%;
   }
 
   .dark {
-    --background: 234 16% 10%;
-    --foreground: 0 0% 98%;
+    --background: 30 18% 7%;
+    --foreground: 40 30% 92%;
 
-    --card: 234 16% 13%;
-    --card-foreground: 0 0% 98%;
+    --card: 30 15% 11%;
+    --card-foreground: 40 30% 92%;
 
-    --popover: 234 16% 13%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 30 15% 11%;
+    --popover-foreground: 40 30% 92%;
 
-    --primary: 239 84% 58%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 42 92% 55%;
+    --primary-foreground: 30 20% 5%;
 
-    --secondary: 263 70% 55%;
+    --secondary: 28 65% 50%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 234 16% 18%;
-    --muted-foreground: 240 5% 65%;
+    --muted: 30 15% 16%;
+    --muted-foreground: 38 15% 60%;
 
-    --accent: 263 70% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 42 85% 55%;
+    --accent-foreground: 30 20% 5%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 160 84% 39%;
+    --success: 152 69% 36%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 38 92% 50%;
+    --warning: 25 92% 55%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 234 16% 20%;
-    --input: 234 16% 20%;
-    --ring: 239 84% 67%;
+    --border: 30 15% 18%;
+    --input: 30 15% 18%;
+    --ring: 42 92% 55%;
 
-    --yield-excellent: 160 84% 45%;
-    --yield-good: 142 71% 50%;
-    --yield-ok: 48 96% 58%;
-    --yield-weak: 38 92% 55%;
-    --yield-bad: 0 84% 55%;
+    --yield-excellent: 152 69% 40%;
+    --yield-good: 142 60% 45%;
+    --yield-ok: 42 92% 55%;
+    --yield-weak: 25 90% 55%;
+    --yield-bad: 0 72% 50%;
 
-    --sidebar-background: 234 16% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 239 84% 67%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 234 16% 15%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 234 16% 20%;
-    --sidebar-ring: 239 84% 67%;
+    --sidebar-background: 30 18% 7%;
+    --sidebar-foreground: 40 30% 92%;
+    --sidebar-primary: 42 92% 55%;
+    --sidebar-primary-foreground: 30 20% 5%;
+    --sidebar-accent: 30 15% 14%;
+    --sidebar-accent-foreground: 40 30% 92%;
+    --sidebar-border: 30 15% 18%;
+    --sidebar-ring: 42 92% 55%;
   }
 }
 
@@ -134,11 +134,11 @@
 
 @layer components {
   .gradient-primary {
-    background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(263, 70%, 50%) 100%);
+    background: linear-gradient(135deg, hsl(42, 92%, 55%) 0%, hsl(28, 65%, 45%) 100%);
   }
 
   .gradient-text {
-    background: linear-gradient(135deg, hsl(239, 84%, 67%) 0%, hsl(263, 70%, 50%) 100%);
+    background: linear-gradient(135deg, hsl(42, 92%, 55%) 0%, hsl(28, 65%, 45%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
