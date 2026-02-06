@@ -253,15 +253,15 @@ const Berechnungen = () => {
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Brutto-Rendite</span>
                       <span className="font-mono font-medium">
-                        {formatNumber(calculation.results.bruttoMietrendite)}%
+                        {formatNumber((calculation.result_data || calculation.results)?.bruttoMietrendite)}%
                       </span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Cashflow/Monat</span>
                       <span className={`font-mono font-medium ${
-                        calculation.results.monatlicheCashflow >= 0 ? 'text-success' : 'text-destructive'
+                        ((calculation.result_data || calculation.results)?.monatlicheCashflow ?? 0) >= 0 ? 'text-success' : 'text-destructive'
                       }`}>
-                        {formatCurrency(calculation.results.monatlicheCashflow)}
+                        {formatCurrency((calculation.result_data || calculation.results)?.monatlicheCashflow)}
                       </span>
                     </div>
                   </div>

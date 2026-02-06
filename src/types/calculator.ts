@@ -100,7 +100,8 @@ export interface SavedCalculation {
   user_id: string;
   name: string;
   input_data: CalculatorInputs;
-  results: CalculatorResults;
+  results?: CalculatorResults;        // Legacy field name
+  result_data?: CalculatorResults;    // New field name in DB
   created_at: string;
   updated_at: string;
 }

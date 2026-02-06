@@ -202,6 +202,36 @@ export type Database = {
           },
         ]
       }
+      ai_advice_cache: {
+        Row: {
+          advice: string
+          checker_type: string
+          context_hash: string
+          created_at: string | null
+          expires_at: string
+          field_key: string
+          id: string
+        }
+        Insert: {
+          advice: string
+          checker_type: string
+          context_hash: string
+          created_at?: string | null
+          expires_at: string
+          field_key: string
+          id?: string
+        }
+        Update: {
+          advice?: string
+          checker_type?: string
+          context_hash?: string
+          created_at?: string | null
+          expires_at?: string
+          field_key?: string
+          id?: string
+        }
+        Relationships: []
+      }
       ai_app_knowledge: {
         Row: {
           answer: string
@@ -1484,6 +1514,7 @@ export type Database = {
           input_data: Json
           is_premium: boolean | null
           lead_id: string | null
+          name: string | null
           org_id: string | null
           premium_purchased_at: string | null
           result_data: Json | null
@@ -1515,6 +1546,7 @@ export type Database = {
           input_data: Json
           is_premium?: boolean | null
           lead_id?: string | null
+          name?: string | null
           org_id?: string | null
           premium_purchased_at?: string | null
           result_data?: Json | null
@@ -1546,6 +1578,7 @@ export type Database = {
           input_data?: Json
           is_premium?: boolean | null
           lead_id?: string | null
+          name?: string | null
           org_id?: string | null
           premium_purchased_at?: string | null
           result_data?: Json | null
@@ -1746,6 +1779,80 @@ export type Database = {
           user_id?: string
           wednesday_end?: string | null
           wednesday_start?: string | null
+        }
+        Relationships: []
+      }
+      checker_results: {
+        Row: {
+          checker_type: string
+          created_at: string | null
+          form_redirect_url: string | null
+          id: string
+          input_data: Json
+          recommendation: string | null
+          result_data: Json
+          session_id: string | null
+        }
+        Insert: {
+          checker_type: string
+          created_at?: string | null
+          form_redirect_url?: string | null
+          id?: string
+          input_data: Json
+          recommendation?: string | null
+          result_data: Json
+          session_id?: string | null
+        }
+        Update: {
+          checker_type?: string
+          created_at?: string | null
+          form_redirect_url?: string | null
+          id?: string
+          input_data?: Json
+          recommendation?: string | null
+          result_data?: Json
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checker_results_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "checker_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      checker_sessions: {
+        Row: {
+          checker_type: string
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          result: Json | null
+          session_data: Json | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          checker_type: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          result?: Json | null
+          session_data?: Json | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          checker_type?: string
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          result?: Json | null
+          session_data?: Json | null
+          status?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -10769,6 +10876,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_subscriptions: {
+        Row: {
+          app_id: string
+          cancel_at_period_end: boolean | null
+          created_at: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          plan_id: string
+          status: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          app_id?: string
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id?: string
+          status?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          app_id?: string
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          plan_id?: string
+          status?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          checks_limit: number | null
+          checks_used: number | null
+          created_at: string | null
+          email: string
+          id: string
+          name: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tier: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          checks_limit?: number | null
+          checks_used?: number | null
+          created_at?: string | null
+          email: string
+          id: string
+          name?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          checks_limit?: number | null
+          checks_used?: number | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          name?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       vorvermieterbescheinigungen: {
         Row: {

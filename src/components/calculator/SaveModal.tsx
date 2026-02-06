@@ -98,8 +98,9 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
       const { error } = await (supabase.from('calculations') as any).insert({
         user_id: user.id,
         name: sanitizedName,
+        tool_type: 'rendite-rechner',
         input_data: inputs,
-        results: results,
+        result_data: results,
       });
 
       if (error) throw error;
