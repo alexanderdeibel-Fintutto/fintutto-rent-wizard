@@ -23,7 +23,7 @@ const Success = () => {
   const planName = plan === 'business' ? 'Business' : plan === 'pro' ? 'Pro' : 'Free';
 
   return (
-    <div className="min-h-screen flex flex-col bg-background relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-hidden">
       <Header onLoginClick={() => {}} />
       
       {/* Confetti Animation */}

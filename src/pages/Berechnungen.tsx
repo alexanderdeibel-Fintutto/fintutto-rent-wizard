@@ -163,7 +163,7 @@ const Berechnungen = () => {
 
   if (authLoading || loading || subLoading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen">
         <Header onLoginClick={() => setShowAuthModal(true)} />
         <div className="container py-12 flex justify-center">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -173,7 +173,7 @@ const Berechnungen = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       <Header onLoginClick={() => setShowAuthModal(true)} />
 
       <main className="container py-6">
