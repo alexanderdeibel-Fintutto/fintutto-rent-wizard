@@ -94,16 +94,25 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
     try {
       const sanitizedName = name.trim().slice(0, CALCULATION_NAME_MAX_LENGTH);
       
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { error } = await (supabase.from('calculations') as any).insert({
+      const insertData = {
         user_id: user.id,
         name: sanitizedName,
         tool_type: 'rendite-rechner',
         input_data: inputs,
         result_data: results,
-      });
+      };
+      
+      console.log('Saving calculation with data:', insertData);
+      
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data, error } = await (supabase.from('calculations') as any).insert(insertData).select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase insert error:', error);
+        throw error;
+      }
+      
+      console.log('Saved successfully:', data);
 
       toast({
         title: 'Gespeichert!',
@@ -113,6 +122,7 @@ export const SaveModal = ({ isOpen, onClose, inputs, results, onLoginRequired }:
       setCalculationCount(prev => prev + 1);
       onClose();
     } catch (error: unknown) {
+      console.error('Save error:', error);
       toast({
         title: 'Fehler beim Speichern',
         description: getGenericErrorMessage(error, 'save'),
