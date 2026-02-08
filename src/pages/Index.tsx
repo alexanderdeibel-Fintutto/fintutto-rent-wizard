@@ -40,10 +40,12 @@ const Index = () => {
       <Header onLoginClick={() => setShowAuthModal(true)} />
 
       {/* Hero Section */}
-      <div className="gradient-primary text-white py-8 px-4">
-        <div className="container">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">Rendite-Rechner</h1>
-          <p className="text-white/80 text-lg">
+      <div className="relative overflow-hidden py-8 px-4">
+        <div className="absolute inset-0 bg-[url('/images/bg-gradient.png')] bg-cover bg-center opacity-60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-background/80" />
+        <div className="container relative z-10">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 text-foreground">Rendite-Rechner</h1>
+          <p className="text-muted-foreground text-lg">
             Berechne die Rendite deiner Immobilien-Investition – live und kostenlos
           </p>
         </div>
