@@ -1373,6 +1373,60 @@ export type Database = {
           },
         ]
       }
+      booking_questions: {
+        Row: {
+          created_at: string | null
+          email_id: string
+          id: string
+          is_resolved: boolean | null
+          question: string
+          resolution_notes: string | null
+          resolved_at: string | null
+          suggested_amount: number | null
+          suggested_category: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_id: string
+          id?: string
+          is_resolved?: boolean | null
+          question: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          suggested_amount?: number | null
+          suggested_category?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email_id?: string
+          id?: string
+          is_resolved?: boolean | null
+          question?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          suggested_amount?: number | null
+          suggested_category?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_questions_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "inbound_emails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_questions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       buildings: {
         Row: {
           acquisition_cost: number | null
@@ -3219,6 +3273,44 @@ export type Database = {
           },
         ]
       }
+      email_attachments: {
+        Row: {
+          created_at: string | null
+          email_id: string
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_id: string
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          email_id?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_attachments_email_id_fkey"
+            columns: ["email_id"]
+            isOneToOne: false
+            referencedRelation: "inbound_emails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_events: {
         Row: {
           brevo_campaign_id: string | null
@@ -3260,6 +3352,41 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      email_inboxes: {
+        Row: {
+          created_at: string | null
+          generated_address: string
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          generated_address: string
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          generated_address?: string
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_inboxes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       emergency_hotline_config: {
         Row: {
@@ -4004,6 +4131,66 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      inbound_emails: {
+        Row: {
+          body_text: string | null
+          booking_id: string | null
+          created_at: string | null
+          id: string
+          inbox_id: string
+          notes: string | null
+          processed_at: string | null
+          received_at: string | null
+          sender_email: string
+          status: Database["public"]["Enums"]["email_processing_status"] | null
+          subject: string | null
+          user_id: string
+        }
+        Insert: {
+          body_text?: string | null
+          booking_id?: string | null
+          created_at?: string | null
+          id?: string
+          inbox_id: string
+          notes?: string | null
+          processed_at?: string | null
+          received_at?: string | null
+          sender_email: string
+          status?: Database["public"]["Enums"]["email_processing_status"] | null
+          subject?: string | null
+          user_id: string
+        }
+        Update: {
+          body_text?: string | null
+          booking_id?: string | null
+          created_at?: string | null
+          id?: string
+          inbox_id?: string
+          notes?: string | null
+          processed_at?: string | null
+          received_at?: string | null
+          sender_email?: string
+          status?: Database["public"]["Enums"]["email_processing_status"] | null
+          subject?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inbound_emails_inbox_id_fkey"
+            columns: ["inbox_id"]
+            isOneToOne: false
+            referencedRelation: "email_inboxes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inbound_emails_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       indexmiete_anpassungen: {
         Row: {
@@ -6607,7 +6794,7 @@ export type Database = {
           primary_color: string | null
           referral_code_used: string | null
           settings: Json | null
-          slug: string
+          slug: string | null
           status: string | null
           street: string | null
           stripe_customer_id: string | null
@@ -6633,7 +6820,7 @@ export type Database = {
           primary_color?: string | null
           referral_code_used?: string | null
           settings?: Json | null
-          slug: string
+          slug?: string | null
           status?: string | null
           street?: string | null
           stripe_customer_id?: string | null
@@ -6659,7 +6846,7 @@ export type Database = {
           primary_color?: string | null
           referral_code_used?: string | null
           settings?: Json | null
-          slug?: string
+          slug?: string | null
           status?: string | null
           street?: string | null
           stripe_customer_id?: string | null
@@ -8160,6 +8347,8 @@ export type Database = {
           full_name: string | null
           id: string
           last_login_at: string | null
+          onboarding_completed: boolean | null
+          organization_id: string | null
           role: string
           status: string | null
           updated_at: string
@@ -8171,6 +8360,8 @@ export type Database = {
           full_name?: string | null
           id: string
           last_login_at?: string | null
+          onboarding_completed?: boolean | null
+          organization_id?: string | null
           role?: string
           status?: string | null
           updated_at?: string
@@ -8182,11 +8373,21 @@ export type Database = {
           full_name?: string | null
           id?: string
           last_login_at?: string | null
+          onboarding_completed?: boolean | null
+          organization_id?: string | null
           role?: string
           status?: string | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       provider_comparisons: {
         Row: {
@@ -10961,6 +11162,41 @@ export type Database = {
         }
         Relationships: []
       }
+      verified_senders: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          is_verified: boolean | null
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          is_verified?: boolean | null
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_verified?: boolean | null
+          user_id?: string
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verified_senders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vorvermieterbescheinigungen: {
         Row: {
           application_id: string | null
@@ -13580,6 +13816,7 @@ export type Database = {
         Args: { p_app_id: string; p_user_id: string }
         Returns: Json
       }
+      get_user_organization_id: { Args: { user_uuid: string }; Returns: string }
       get_vacancies_for_period: {
         Args: {
           p_period_end: string
@@ -13732,6 +13969,7 @@ export type Database = {
       }
     }
     Enums: {
+      email_processing_status: "pending" | "processed" | "unclear" | "rejected"
       esignature_status:
         | "draft"
         | "pending"
@@ -13901,6 +14139,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      email_processing_status: ["pending", "processed", "unclear", "rejected"],
       esignature_status: [
         "draft",
         "pending",
