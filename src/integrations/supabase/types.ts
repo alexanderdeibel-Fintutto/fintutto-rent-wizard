@@ -1429,16 +1429,13 @@ export type Database = {
       }
       buildings: {
         Row: {
-          acquisition_cost: number | null
-          acquisition_date: string | null
+          address: string | null
           address_addition: string | null
           building_type: string | null
           caretaker_owner_id: string | null
           city: string
-          construction_year: number | null
           country: string | null
           created_at: string | null
-          created_by: string | null
           district: string | null
           external_landlord_email: string | null
           external_landlord_name: string | null
@@ -1446,38 +1443,39 @@ export type Database = {
           house_number: string | null
           id: string
           internal_reference: string | null
-          land_area_sqm: number | null
+          land_area: number | null
           latitude: number | null
+          living_space: number | null
           longitude: number | null
           metadata: Json | null
           name: string
           notes: string | null
-          occupied_unit_count: number | null
-          org_id: string | null
+          occupied_units: number | null
+          organization_id: string | null
           owner_type: string
           ownership_share: number | null
           ownership_type: string | null
+          postal_code: string
+          purchase_date: string | null
+          purchase_price: number | null
           renovation_year: number | null
           state: string | null
           status: string | null
           street: string
-          total_living_area_sqm: number | null
-          total_usable_area_sqm: number | null
-          unit_count: number | null
+          total_area: number | null
+          total_units: number | null
           updated_at: string | null
-          zip: string
+          user_id: string | null
+          year_built: number | null
         }
         Insert: {
-          acquisition_cost?: number | null
-          acquisition_date?: string | null
+          address?: string | null
           address_addition?: string | null
           building_type?: string | null
           caretaker_owner_id?: string | null
           city: string
-          construction_year?: number | null
           country?: string | null
           created_at?: string | null
-          created_by?: string | null
           district?: string | null
           external_landlord_email?: string | null
           external_landlord_name?: string | null
@@ -1485,38 +1483,39 @@ export type Database = {
           house_number?: string | null
           id?: string
           internal_reference?: string | null
-          land_area_sqm?: number | null
+          land_area?: number | null
           latitude?: number | null
+          living_space?: number | null
           longitude?: number | null
           metadata?: Json | null
           name: string
           notes?: string | null
-          occupied_unit_count?: number | null
-          org_id?: string | null
+          occupied_units?: number | null
+          organization_id?: string | null
           owner_type?: string
           ownership_share?: number | null
           ownership_type?: string | null
+          postal_code: string
+          purchase_date?: string | null
+          purchase_price?: number | null
           renovation_year?: number | null
           state?: string | null
           status?: string | null
           street: string
-          total_living_area_sqm?: number | null
-          total_usable_area_sqm?: number | null
-          unit_count?: number | null
+          total_area?: number | null
+          total_units?: number | null
           updated_at?: string | null
-          zip: string
+          user_id?: string | null
+          year_built?: number | null
         }
         Update: {
-          acquisition_cost?: number | null
-          acquisition_date?: string | null
+          address?: string | null
           address_addition?: string | null
           building_type?: string | null
           caretaker_owner_id?: string | null
           city?: string
-          construction_year?: number | null
           country?: string | null
           created_at?: string | null
-          created_by?: string | null
           district?: string | null
           external_landlord_email?: string | null
           external_landlord_name?: string | null
@@ -1524,31 +1523,35 @@ export type Database = {
           house_number?: string | null
           id?: string
           internal_reference?: string | null
-          land_area_sqm?: number | null
+          land_area?: number | null
           latitude?: number | null
+          living_space?: number | null
           longitude?: number | null
           metadata?: Json | null
           name?: string
           notes?: string | null
-          occupied_unit_count?: number | null
-          org_id?: string | null
+          occupied_units?: number | null
+          organization_id?: string | null
           owner_type?: string
           ownership_share?: number | null
           ownership_type?: string | null
+          postal_code?: string
+          purchase_date?: string | null
+          purchase_price?: number | null
           renovation_year?: number | null
           state?: string | null
           status?: string | null
           street?: string
-          total_living_area_sqm?: number | null
-          total_usable_area_sqm?: number | null
-          unit_count?: number | null
+          total_area?: number | null
+          total_units?: number | null
           updated_at?: string | null
-          zip?: string
+          user_id?: string | null
+          year_built?: number | null
         }
         Relationships: [
           {
             foreignKeyName: "buildings_org_id_fkey"
-            columns: ["org_id"]
+            columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
             referencedColumns: ["id"]
@@ -2806,6 +2809,56 @@ export type Database = {
           },
         ]
       }
+      document_questions: {
+        Row: {
+          answer: string | null
+          answered_at: string | null
+          answered_by: string | null
+          company_id: string | null
+          created_at: string
+          document_id: string
+          id: string
+          question: string
+          question_type: string
+          status: string
+          suggested_answer: string | null
+        }
+        Insert: {
+          answer?: string | null
+          answered_at?: string | null
+          answered_by?: string | null
+          company_id?: string | null
+          created_at?: string
+          document_id: string
+          id?: string
+          question: string
+          question_type?: string
+          status?: string
+          suggested_answer?: string | null
+        }
+        Update: {
+          answer?: string | null
+          answered_at?: string | null
+          answered_by?: string | null
+          company_id?: string | null
+          created_at?: string
+          document_id?: string
+          id?: string
+          question?: string
+          question_type?: string
+          status?: string
+          suggested_answer?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_questions_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_shares: {
         Row: {
           access_level: string | null
@@ -3355,25 +3408,40 @@ export type Database = {
       }
       email_inboxes: {
         Row: {
+          allowed_senders: string[] | null
+          company_id: string | null
           created_at: string | null
+          email_address: string | null
+          email_prefix: string | null
           generated_address: string
           id: string
+          inbox_address: string | null
           is_active: boolean | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          allowed_senders?: string[] | null
+          company_id?: string | null
           created_at?: string | null
+          email_address?: string | null
+          email_prefix?: string | null
           generated_address: string
           id?: string
+          inbox_address?: string | null
           is_active?: boolean | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          allowed_senders?: string[] | null
+          company_id?: string | null
           created_at?: string | null
+          email_address?: string | null
+          email_prefix?: string | null
           generated_address?: string
           id?: string
+          inbox_address?: string | null
           is_active?: boolean | null
           updated_at?: string | null
           user_id?: string
@@ -3387,6 +3455,78 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      email_receipts: {
+        Row: {
+          amount: number | null
+          category: string | null
+          company_id: string | null
+          confidence: number | null
+          created_at: string
+          date: string | null
+          description: string | null
+          file_name: string | null
+          file_url: string | null
+          id: string
+          inbox_id: string | null
+          question_text: string | null
+          receipt_id: string | null
+          received_at: string
+          sender_email: string
+          status: string
+          subject: string | null
+          tax_amount: number | null
+          transaction_id: string | null
+          updated_at: string
+          vendor: string | null
+        }
+        Insert: {
+          amount?: number | null
+          category?: string | null
+          company_id?: string | null
+          confidence?: number | null
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          inbox_id?: string | null
+          question_text?: string | null
+          receipt_id?: string | null
+          received_at?: string
+          sender_email?: string
+          status?: string
+          subject?: string | null
+          tax_amount?: number | null
+          transaction_id?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number | null
+          category?: string | null
+          company_id?: string | null
+          confidence?: number | null
+          created_at?: string
+          date?: string | null
+          description?: string | null
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          inbox_id?: string | null
+          question_text?: string | null
+          receipt_id?: string | null
+          received_at?: string
+          sender_email?: string
+          status?: string
+          subject?: string | null
+          tax_amount?: number | null
+          transaction_id?: string | null
+          updated_at?: string
+          vendor?: string | null
+        }
+        Relationships: []
       }
       emergency_hotline_config: {
         Row: {
@@ -11164,27 +11304,36 @@ export type Database = {
       }
       verified_senders: {
         Row: {
+          added_by: string | null
+          company_id: string | null
           created_at: string | null
           email: string
           id: string
           is_verified: boolean | null
           user_id: string
+          verification_token: string | null
           verified_at: string | null
         }
         Insert: {
+          added_by?: string | null
+          company_id?: string | null
           created_at?: string | null
           email: string
           id?: string
           is_verified?: boolean | null
           user_id: string
+          verification_token?: string | null
           verified_at?: string | null
         }
         Update: {
+          added_by?: string | null
+          company_id?: string | null
           created_at?: string | null
           email?: string
           id?: string
           is_verified?: boolean | null
           user_id?: string
+          verification_token?: string | null
           verified_at?: string | null
         }
         Relationships: [
