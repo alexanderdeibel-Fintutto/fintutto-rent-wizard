@@ -1,44 +1,47 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 30 15% 8%;
-    --foreground: 40 30% 95%;
+    --background: 0 0% 96%;
+    --foreground: 0 0% 9%;
 
-    --card: 30 15% 12% / 0.85;
-    --card-foreground: 40 30% 95%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 9%;
 
-    --popover: 30 15% 12%;
-    --popover-foreground: 40 30% 95%;
+    --popover: 0 0% 89%;
+    --popover-foreground: 0 0% 9%;
 
-    --primary: 42 92% 50%;
-    --primary-foreground: 30 20% 5%;
+    --primary: 243 75% 58%;
+    --primary-foreground: 225 100% 96%;
 
-    --secondary: 28 65% 45%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 32%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 30 15% 18%;
-    --muted-foreground: 38 20% 65%;
+    --muted: 0 0% 63%;
+    --muted-foreground: 0 0% 9%;
 
-    --accent: 42 85% 55%;
-    --accent-foreground: 30 20% 5%;
+    --accent: 250 100% 97%;
+    --accent-foreground: 258 89% 66%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 85% 97%;
 
-    --success: 152 69% 40%;
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 25 95% 53%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
 
-    --border: 30 15% 22%;
-    --input: 30 15% 18%;
-    --ring: 42 92% 50%;
+    --border: 0 0% 83%;
+    --input: 0 0% 83%;
+    --ring: 243 75% 58%;
 
-    --radius: 0.75rem;
+    --radius: 1.25rem;
 
     /* Yield rating colors */
     --yield-excellent: 152 69% 31%;
@@ -48,52 +51,82 @@
     --yield-bad: 0 72% 51%;
 
     /* Gradient */
-    --gradient-primary: linear-gradient(135deg, hsl(42, 92%, 50%) 0%, hsl(28, 65%, 45%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(160 84% 39%) 0%, hsl(160 84% 30%) 100%);
 
-    --sidebar-background: 30 15% 10%;
-    --sidebar-foreground: 40 30% 90%;
-    --sidebar-primary: 42 92% 50%;
-    --sidebar-primary-foreground: 30 20% 5%;
-    --sidebar-accent: 30 15% 16%;
-    --sidebar-accent-foreground: 40 30% 92%;
-    --sidebar-border: 30 15% 22%;
-    --sidebar-ring: 42 92% 50%;
+    --sidebar-background: 220 14% 98%;
+    --sidebar-foreground: 0 0% 9%;
+    --sidebar-primary: 243 75% 58%;
+    --sidebar-primary-foreground: 225 100% 96%;
+    --sidebar-accent: 0 0% 32%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 83%;
+    --sidebar-ring: 243 75% 58%;
+    --ek-kritisch: 0 72% 51%;
+    --ek-ausreichend: 38 92% 50%;
+    --ek-gut: 142 71% 45%;
+    --ek-sehr-gut: 152 69% 31%;
+    --gradient-success: linear-gradient(135deg, hsl(152, 69%, 36%) 0%, hsl(152, 69%, 26%) 100%);
+    --info: 217 91% 60%;
+    --info-foreground: 0 0% 100%;
+    --gradient-dark: linear-gradient(135deg, hsl(220 14% 98%) 0%, hsl(160 14% 96%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 100%) 0%, hsl(220 14% 98%) 100%);
+    --shadow-glow: 0 0 40px -10px hsl(160 84% 39% / 0.2);
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.1);
+    --chart-1: 234 89% 73%;
+    --chart-2: 255 91% 76%;
+    --chart-3: 270 95% 75%;
+    --chart-4: 238 83% 66%;
+    --chart-5: 0 0% 45%;
+    --sidebar: 0 0% 98%;
+    --font-sans: "Lato", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+    --font-serif: "EB Garamond", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
   }
 
   .dark {
-    --background: 30 18% 7%;
-    --foreground: 40 30% 92%;
+    --background: 0 0% 9%;
+    --foreground: 0 0% 98%;
 
-    --card: 30 15% 11%;
-    --card-foreground: 40 30% 92%;
+    --card: 0 0% 14%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 30 15% 11%;
-    --popover-foreground: 40 30% 92%;
+    --popover: 0 0% 25%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 42 92% 55%;
-    --primary-foreground: 30 20% 5%;
+    --primary: 234 89% 73%;
+    --primary-foreground: 243 47% 20%;
 
-    --secondary: 28 65% 50%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 0 0% 45%;
+    --secondary-foreground: 0 0% 98%;
 
-    --muted: 30 15% 16%;
-    --muted-foreground: 38 15% 60%;
+    --muted: 0 0% 45%;
+    --muted-foreground: 0 0% 98%;
 
-    --accent: 42 85% 55%;
-    --accent-foreground: 30 20% 5%;
+    --accent: 261 72% 22%;
+    --accent-foreground: 255 91% 76%;
 
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 85% 97%;
 
-    --success: 152 69% 36%;
-    --success-foreground: 0 0% 100%;
+    --success: 160 84% 39%;
+    --success-foreground: 222 47% 6%;
 
-    --warning: 25 92% 55%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 6%;
 
-    --border: 30 15% 18%;
-    --input: 30 15% 18%;
-    --ring: 42 92% 55%;
+    --border: 0 0% 32%;
+    --input: 0 0% 32%;
+    --ring: 234 89% 73%;
 
     --yield-excellent: 152 69% 40%;
     --yield-good: 142 60% 45%;
@@ -101,14 +134,39 @@
     --yield-weak: 25 90% 55%;
     --yield-bad: 0 72% 50%;
 
-    --sidebar-background: 30 18% 7%;
-    --sidebar-foreground: 40 30% 92%;
-    --sidebar-primary: 42 92% 55%;
-    --sidebar-primary-foreground: 30 20% 5%;
-    --sidebar-accent: 30 15% 14%;
-    --sidebar-accent-foreground: 40 30% 92%;
-    --sidebar-border: 30 15% 18%;
-    --sidebar-ring: 42 92% 55%;
+    --sidebar-background: 0 0% 0% / 0.3;
+    --sidebar-foreground: 0 0% 98%;
+    --sidebar-primary: 234 89% 73%;
+    --sidebar-primary-foreground: 243 47% 20%;
+    --sidebar-accent: 255 91% 76%;
+    --sidebar-accent-foreground: 261 72% 22%;
+    --sidebar-border: 0 0% 32%;
+    --sidebar-ring: 234 89% 73%;
+    --ek-kritisch: 0 72% 55%;
+    --ek-ausreichend: 38 92% 55%;
+    --ek-gut: 142 71% 50%;
+    --ek-sehr-gut: 152 69% 40%;
+    --info: 217 91% 60%;
+    --info-foreground: 210 40% 98%;
+    --gradient-dark: linear-gradient(135deg, hsl(222 47% 6%) 0%, hsl(160 30% 8%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(222 47% 10% / 0.5) 0%, hsl(222 47% 8% / 0.3) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(160 84% 39%) 0%, hsl(160 84% 30%) 100%);
+    --shadow-glow: 0 0 40px -10px hsl(160 84% 39% / 0.3);
+    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.4);
+    --chart-1: 229 93% 81%;
+    --chart-2: 252 94% 85%;
+    --chart-3: 269 97% 85%;
+    --chart-4: 234 89% 73%;
+    --chart-5: 0 0% 45%;
+    --sidebar: 0 0% 14%;
+    --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+    --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
   }
 }
 
